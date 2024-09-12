@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="OracleDbHandler"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <statements>
+    
+    <select id="select_information_schema_tables" resultClass="System.Collections.Hashtable">
+      SELECT distinct
+        OBJECT_NAME as table_name 
+      FROM
+        USER_OBJECTS 
+      WHERE
+        OBJECT_TYPE = 'TABLE'
+      order by OBJECT_NAME
+    </select>
+
+    <select id="select_information_schema_columns" resultClass="System.Collections.Hashtable">
+      select
+        ii.table_name
+        , ii.column_name
+        , ii.data_type
+        , ii.data_type as data_type_short
+        , ii.data_length as character_maximum_length
+        , ii.data_precision as data_precision
+        , ii.data_default as column_default
+        , case 
+          when ii.nullable = 'N' 
+          then 'not nullable' 
+          else '' 
+          end as column_nullable
+        , pks.is_primary_key 
+      from
+        USER_TAB_COLS ii 
+        left outer join ( 
+          SELECT
+            cols.table_name
+            , cols.column_name
+            , '1' as is_primary_key 
+          FROM
+            all_constraints cons
+            , all_cons_columns cols 
+          WHERE
+            cons.constraint_type = 'P' 
+            AND cons.constraint_name = cols.constraint_name 
+            AND cons.owner = cols.owner 
+          ORDER BY
+            cols.table_name
+            , cols.position
+        ) pks 
+          on ii.table_name = pks.table_name 
+          and ii.column_name = pks.column_name 
+      where
+        ii.TABLE_NAME in ( 
+          SELECT
+            OBJECT_NAME 
+          FROM
+            USER_OBJECTS 
+          WHERE
+            OBJECT_TYPE = 'TABLE'
+        ) 
+      order by
+        ii.table_name
+        , ii.column_id
+    </select>
+    
+  </statements>
+</sqlMap>

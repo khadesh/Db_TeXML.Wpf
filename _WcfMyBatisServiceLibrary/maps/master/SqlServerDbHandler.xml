@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="SqlServerDbHandler"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <statements>
+    
+    <select id="select_information_schema_tables" resultClass="System.Collections.Hashtable">
+      SELECT
+        table_name as table_name 
+      FROM
+        INFORMATION_SCHEMA.TABLES 
+      where
+        TABLE_TYPE = 'BASE TABLE' 
+        and TABLE_CATALOG = #database# 
+      order by
+        table_name
+    </select>
+
+    <select id="select_information_schema_columns" resultClass="System.Collections.Hashtable">
+      SELECT
+        cols.table_name
+        , cols.column_name
+        , cols.data_type as data_type
+        , cols.data_type as data_type_short
+        , cols.character_maximum_length
+        , cols.column_default
+        , case 
+          when cols.is_nullable = 'NO' 
+          then 'not nullable' 
+          else '' 
+          end as column_nullable
+        , pks.is_primary_key 
+      FROM
+        INFORMATION_SCHEMA.COLUMNS cols 
+        left outer join ( 
+          SELECT
+            '1' as is_primary_key
+            , Col.column_name
+            , Tab.table_name 
+          from
+            INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab
+            , INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
+          WHERE
+            Col.Constraint_Name = Tab.Constraint_Name 
+            AND Col.Table_Name = Tab.Table_Name 
+            AND Constraint_Type = 'PRIMARY KEY'
+        ) pks 
+          on cols.table_name = pks.table_name 
+          and cols.column_name = pks.column_name 
+      where
+        cols.TABLE_CATALOG = #database# 
+      order by
+        cols.table_name
+        , cols.ORDINAL_POSITION asc
+    </select>
+    
+  </statements>
+</sqlMap>

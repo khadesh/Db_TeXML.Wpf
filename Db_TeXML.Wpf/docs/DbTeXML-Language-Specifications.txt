@@ -1,0 +1,273 @@
+########################################################################################################
+# Db TeXML - Database Translation Engine Mark-up Language Specifications:
+########################################################################################################
+
+########################################################################################################
+1. Database Connections
+
+To ensure connectivity to your postgresql database, please remember to allow access from local addresses and your local intra-net.
+
+To do this please add the following lines to your pg_hba.conf file:
+
+File location for Windows:
+C:\Program Files\PostgreSQL\9.3\data\pg_hba.conf
+
+Lines to add:
+host all all 127.0.0.1/32   md5
+host all all 192.168.2.0/24 trust
+
+This should allow for accessibility to ensure connections can be established.
+########################################################################################################
+
+
+########################################################################################################
+2. Purpose of this Engine
+
+To apply text templates to all tables and their respective columns within a database, to auto-generate code for a variety of needs. Please connect in practice mode to view examples for how this engine can be used to auto-generate dynamic sql files, html forms, and more.
+########################################################################################################
+
+
+########################################################################################################
+3. Commands
+
+There are only two types of commands within DbTeXML, the table command and the col command with its variations: col, col_primary, col_nonprimary, col_excluded.
+
+When a command is used it should follow one of the following formats:
+
+<command: /command>
+or
+<command('separator','prefix','suffix','filename'): /command>
+
+List of commands:
+* <table('separator','prefix','suffix','filename'): ... /table>
+* <table: /table>
+* <col('separator','prefix','suffix'): ... /col>
+* <col: /col>
+* <col_primary('separator','prefix','suffix'): ... /col_primary>
+* <col_primary: /col_primary>
+* <col_nonprimary('separator','prefix','suffix'): ... /col_nonprimary>
+* <col_nonprimary: /col_nonprimary>
+* <col_excluded('separator','prefix','suffix'): ... /col_excluded>
+* <col_excluded: /col_excluded>
+> Note that excluded columns must be defined at the top of a script in the header section, with notation like:
+# excludes = create_date, delete_flg
+
+-------------------
+The Header Section:
+
+The header section at the very top of the file is reserved for comments and special commands. The header section can be any number of lines starting with line 1, and is defined such that every line in the header begins with a '#' character. The script begins on the first line that begins without a '#' character, and subsequent '#' characters will be assumed to be a part of the script. Note that line 1 must begin with a # character if you wish have a header section. There is no way to begin a script with a '#' at the start of a line currently, unless the user makes use of a prefix setting within a table command.
+
+There are two special commands available in the header section:
+
+# excludes = create_date, delete_flg
+> This command denotes which columns to be excluded from processing. The col, col_primary, col_nonprimary commands will all ignore columns in this list. It can be useful for columns that exist in all tables when generating certain scripts, for example create_date and delete_flg.
+
+# file = MyOutputFile.txt
+> This command will denote an alternate save filename for the scripts output. 
+> Be careful to ensure that filenames are unique.
+> All whitespace within a filename will be removed, the filename is considered everything in the line after "#file=".
+> Whitespace is allowed before and after "file", "-", and the filename, but will be ignored.
+> Also remember referencing other directories than the standard output directory is possible, but it is up to the user to ensure that such a directory exists and is accessible. Referencing network drives is currently not supported. 
+> Use of the "..\" operator for referencing parent directories is unsupported and will generate an error when attempting to save. 
+
+---------
+Comments:
+
+Comments are denoted to start after '//' and end at the end of the line. A '/' by itself will be assumed to be a part of the script. '\/\/' can be used to escape '//' as a part of the script rather than a comment. And '\\' can be used to escape the escape character '\'. 
+########################################################################################################
+
+
+########################################################################################################
+4. Rules regarding commands:
+
+1. table commands cannot be embedded within other commands.
+2. the col command and its variations must be embedded within a table command, but cannot be embedded within another col command variation.
+3. commands are case sensitive, and should be all lower case.
+4. please note that the fourth argument, filename, is only definable for the table command. 
+
+Arguments:
+* separator - each iteration will be separated by the characters set in this argument.
+* prefix - each iteration will add this prefix to it.
+* suffix - each iteration will add this suffix to it.
+* filename - all contents for each iteration will be saved to a filename specified by the argument.
+> For example, 'table.name.sql.sql' will create a file named practice.sql for the table defined as: create table practice ( id int );
+> Any table.xxx.yyy command can be used to generate the filename, but if they do not generate a unique name, the output may be inconsistent. For this reason I recommend you always use one occurrence of table.name.sql in the filename.
+
+Why use prefixes, suffixes and separators? 
+Prefixes, suffixes and separators will only be added in the event that at least one (two for separators) item is matched. New line characters '\n' can be input here to create more compact and readable code, as well as other characters that you only desire output for if there is at least one occurrence.
+########################################################################################################
+
+
+########################################################################################################
+5. Examples:
+
+To demonstrate the usage of these commands we will use the practice database which contains tables for students, classes, schedules, and a last table with all postgresql types name alltypes, so you can see how various types are converted through the parser (note that types pg_lsn and jsonb are excluded):
+
+drop table alltypes;
+create table alltypes (
+	type01 bigint  ,
+	type02 bigserial  ,
+	type03 bit  ,
+	type04 bit varying  ,
+	type05 boolean  ,
+	type06 box  ,
+	type07 bytea  ,
+	type08 character  ,
+	type09 varchar(8)  ,
+	type10 cidr  ,
+	type11 circle  ,
+	type12 date  ,
+	type13 double precision  ,
+	type14 inet  ,
+	type15 integer  ,
+	type16 interval  ,
+	type17 json  ,
+	type18 line  ,
+	type19 lseg  ,
+	type20 macaddr  ,
+	type21 money  ,
+	type22 numeric  ,
+	type23 path  ,
+	type24 point  ,
+	type25 polygon  ,
+	type26 real  ,
+	type27 smallint  ,
+	type28 smallserial  ,
+	type29 serial  ,
+	type30 text  ,
+	type31 time without time zone  ,
+	type32 time with time zone  ,
+	type33 timestamp without time zone  ,
+	type34 timestamp with time zone  ,
+	type35 tsquery  ,
+	type36 tsvector  ,
+	type37 txid_snapshot  ,
+	type38 uuid  ,
+	type39 xml  
+);
+
+drop table classes;
+create table classes (
+	class_id integer not null ,
+	class_name varchar(64)  ,
+	create_date timestamp without time zone  ,
+	primary key (class_id)
+);
+
+drop table schedule;
+create table schedule (
+	student_id integer not null ,
+	class_id integer not null ,
+	primary key (student_id, class_id)
+);
+
+drop table students;
+create table students (
+	student_id integer not null ,
+	student_name varchar(64)  ,
+	create_date timestamp without time zone  ,
+	primary key (student_id)
+);
+
+########################################################################################################
+
+########################################################################################################
+#
+# Practice Script #1
+#
+# file = PracticeDb.sql
+#
+# This script will produce a create script for the 
+# database defined in the "Examples" section (defined above).
+#
+# It will save the contents to the file PracticeDb.sql
+#
+<table('\n'): drop table table.name.sql;
+create table table.name.sql (
+<col(',\n'):	col.name.sql col.type.sql col.type.nullable col.type.default /col><col_primary(', ',',\n	primary key (',')'): col_primary.name.sql /col_primary>
+);
+/table>
+########################################################################################################
+
+
+########################################################################################################
+#
+# Practice Script #2
+#
+# file = Db.cs
+#
+# This script will produce a C# class for each table.  
+#
+# It will save the contents to the file Db.cs, 
+# and it will save each individual class file as well.
+#
+<table('\n','','','DbClasses\Db_table.name.class.cs'): public class Db_table.name.class
+{
+<col:	public col.type.cs col.name.sql { get; set; } \/\/ Sql type: col.type.sql 
+/col>}
+/table>
+########################################################################################################
+
+########################################################################################################
+#
+# Practice Script #3
+#
+# Sample script for auto generating mybatis dynamic sql select/insert/update statements for all database tables.
+#
+# file = Maps\AutoGen\AutoGenIbatis.xml
+#
+# This script assumes the following cols are in every table:
+# excludes = flg_is_del, dt_update, dt_create
+#
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="AutoGenIbatis"
+xmlns="http:\/\/ibatis.apache.org/mapping"
+xmlns:xsi="http:\/\/www.w3.org/2001/XMLSchema-instance">
+
+<table('\n'):	<select id="select_table.name.sql" resultClass="System.Collections.Hashtable">
+      select
+        flg_is_del,
+        dt_update,
+        dt_create
+      from
+        table.name.class
+      where
+        flg_is_del = '0'
+      
+<col('','      <dynamic>\n','\n      </dynamic>'):
+        <isNotEmpty prepend='AND' property="col.name.sql">col.name.sql = #col.name.sql#</isNotEmpty>
+        <isNotEmpty prepend='AND' property="col.name.sql_from">col.name.sql &gt;= #col.name.sql#</isNotEmpty>
+        <isNotEmpty prepend='AND' property="col.name.sql_to">col.name.sql &lt;= #col.name.sql#</isNotEmpty>
+/col>
+   
+	</select>
+/table>
+<table('\n'):	<insert id="insert_table.name.sql" resultClass="System.Collections.Hashtable">
+      insert into t_users_info
+      (
+        flg_is_del,
+        dt_create,
+        dt_update
+<col('\n','      <dynamic>\n','\n      </dynamic>'): 		<isNotEmpty prepend='' property="col.name.sql">,col.name.sql</isNotEmpty>/col>
+      )
+	  values
+	  (
+      '0',
+      GETDATE(),
+      GETDATE()
+<col('\n','      <dynamic>\n','\n      </dynamic>'):		<isNotEmpty prepend='' property="col.name.sql">,#col.name.sql#</isNotEmpty>/col> 
+      )      
+	</insert>
+/table>
+<table('\n'):	<update id="update_table.name.sql" resultClass="System.Collections.Hashtable">
+      update t_users_info
+      set
+        dt_update = GETDATE()
+<col_nonprimary('\n','      <dynamic>\n','\n      </dynamic>'):		<isNotEmpty prepend='' property="col_nonprimary.name.sql">,col_nonprimary.name.sql = #col_nonprimary.name.sql#</isNotEmpty>/col_nonprimary> 
+      where
+        1 = 1
+<col_primary('\n','      <dynamic>\n','\n      </dynamic>'):		<isNotEmpty prepend='' property="col_primary.name.sql">and col_primary.name.sql = #col_primary.name.sql#</isNotEmpty>/col_primary>
+	</update>
+/table>  </statements>
+</sqlMap>
+########################################################################################################

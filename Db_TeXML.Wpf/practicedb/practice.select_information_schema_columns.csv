@@ -1,0 +1,48 @@
+table_name	column_name	data_type	data_type_short	character_maximum_length	column_default	column_nullable	is_primary_key
+alltypes	type01	bigint	int8	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type02	bigint	int8	​(NULL)​	nextval('alltypes_type02_seq'::regclass)	not nullable	​(NULL)​
+alltypes	type03	bit	bit	1	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type04	bit varying	varbit	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type05	boolean	bool	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type06	box	box	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type07	bytea	bytea	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type08	character	bpchar	1	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type09	character varying	varchar	8	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type10	cidr	cidr	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type11	circle	circle	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type12	date	date	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type13	double precision	float8	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type14	inet	inet	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type15	integer	int4	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type16	interval	interval	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type17	json	json	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type18	line	line	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type19	lseg	lseg	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type20	macaddr	macaddr	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type21	money	money	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type22	numeric	numeric	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type23	path	path	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type24	point	point	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type25	polygon	polygon	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type26	real	float4	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type27	smallint	int2	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type28	smallint	int2	​(NULL)​	nextval('alltypes_type28_seq'::regclass)	not nullable	​(NULL)​
+alltypes	type29	integer	int4	​(NULL)​	nextval('alltypes_type29_seq'::regclass)	not nullable	​(NULL)​
+alltypes	type30	text	text	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type31	time without time zone	time	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type32	time with time zone	timetz	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type33	timestamp without time zone	timestamp	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type34	timestamp with time zone	timestamptz	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type35	tsquery	tsquery	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type36	tsvector	tsvector	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type37	txid_snapshot	txid_snapshot	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type38	uuid	uuid	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+alltypes	type39	xml	xml	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+classes	class_id	integer	int4	​(NULL)​	​(NULL)​	not nullable	1
+classes	class_name	character varying	varchar	64	​(NULL)​	​(NULL)​	​(NULL)​
+classes	create_date	timestamp without time zone	timestamp	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​
+schedule	student_id	integer	int4	​(NULL)​	​(NULL)​	not nullable	1
+schedule	class_id	integer	int4	​(NULL)​	​(NULL)​	not nullable	1
+students	student_id	integer	int4	​(NULL)​	​(NULL)​	not nullable	1
+students	student_name	character varying	varchar	64	​(NULL)​	​(NULL)​	​(NULL)​
+students	create_date	timestamp without time zone	timestamp	​(NULL)​	​(NULL)​	​(NULL)​	​(NULL)​

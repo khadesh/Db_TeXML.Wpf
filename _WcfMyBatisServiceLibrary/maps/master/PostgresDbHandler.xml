@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PostgresDbHandler"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <statements>
+    
+    <select id="select_information_schema_tables" resultClass="System.Collections.Hashtable">
+      select
+        table_name as table_name
+      from
+        INFORMATION_SCHEMA.TABLES 
+      where
+        table_catalog = #database# 
+        and table_schema = 'public' 
+        and is_insertable_into = 'YES'
+      order by
+        table_name
+    </select>
+
+    <select id="select_information_schema_columns" resultClass="System.Collections.Hashtable">
+      select
+        ii.table_name
+        , ii.column_name
+        , ii.data_type
+        , ii.udt_name as data_type_short
+        , ii.character_maximum_length
+        , ii.column_default
+        , case when ii.is_nullable = 'NO' then 'not nullable' else '' end as column_nullable
+        , pks.is_primary_key 
+      from
+        INFORMATION_SCHEMA.COLUMNS ii 
+        left outer join ( 
+          select
+            tc.table_schema
+            , tc.table_name
+            , kc.column_name
+            , 1 as is_primary_key
+          from
+            information_schema.table_constraints tc
+            , information_schema.key_column_usage kc 
+          where
+            tc.constraint_type = 'PRIMARY KEY' 
+            and kc.table_name = tc.table_name 
+            and kc.table_schema = tc.table_schema 
+            and kc.constraint_name = tc.constraint_name 
+          order by
+            1, 2
+        ) pks 
+          on ii.table_schema = pks.table_schema 
+          and ii.table_name = pks.table_name 
+          and ii.column_name = pks.column_name 
+      where
+        ii.table_catalog = #database# 
+        and ii.table_schema = 'public' 
+        and ii.is_updatable = 'YES' 
+      order by
+        ii.table_name, ii.ordinal_position
+    </select>
+    
+  </statements>
+</sqlMap>

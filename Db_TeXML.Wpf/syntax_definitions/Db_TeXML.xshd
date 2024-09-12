@@ -1,0 +1,17 @@
+<SyntaxDefinition name="dbtexml"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Comment" foreground="Green" />
+    <Color name="String" foreground="Blue" />
+    
+    <RuleSet>
+        <Span color="Comment" begin="//" /> 
+        
+        <Keywords fontWeight="bold" foreground="Blue">
+          <Word>placefiller</Word>
+        </Keywords>
+
+        <Keywords fontWeight="bold" foreground="DarkMagenta">
+          <Word>placefiller</Word>
+        </Keywords>
+    </RuleSet>
+</SyntaxDefinition>

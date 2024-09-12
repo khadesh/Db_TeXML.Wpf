@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="MySqlDbHandler"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <statements>
+    
+    <select id="select_information_schema_tables" resultClass="System.Collections.Hashtable">
+      SELECT
+        table_name as table_name 
+      FROM
+        INFORMATION_SCHEMA.TABLES 
+      where
+        TABLE_TYPE = 'BASE TABLE' 
+        and TABLE_SCHEMA = #database# 
+      order by
+        table_name
+    </select>
+    
+    <select id="select_information_schema_columns" resultClass="System.Collections.Hashtable">
+      SELECT
+        cols.table_name
+        , cols.column_name
+        , cols.data_type as data_type
+        , cols.data_type as data_type_short
+        , cols.character_maximum_length
+        , cols.column_default
+        , case 
+          when cols.is_nullable = 'NO' 
+          then 'not nullable' 
+          else '' 
+          end as column_nullable
+        , case when cols.column_key = 'PRI' then '1' else '' end as is_primary_key
+      FROM
+        INFORMATION_SCHEMA.COLUMNS cols 
+
+      where
+        cols.TABLE_SCHEMA = #database# 
+      order by
+        cols.table_name
+        , cols.ORDINAL_POSITION asc
+    </select>
+    
+  </statements>
+</sqlMap>

@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<messages>
+  <!--
+  To add replaceable markers use the following syntax:
+  %i%
+  Where i is an integer starting at 0 and then incrementing by 1 for each index you wish to add.
+  
+  An example would be:
+  <message 
+    key="Sample" 
+    value="%0% cannot be added to the database, you have %1% more tries."
+  />
+  
+  This statement can be filled as follows:
+  MessageParser["Sample", new string[] {"Test User", "2"}]
+  To produce:
+  "Test User cannot be added to the database, you have 2 more tries."
+  -->
+
+  <!-- General Messages -->
+  <message
+    key="GeneralError"
+    value="An unhandled exception has occurred, please contact the system administrator for assistance."
+    />
+
+  <message
+    key="CommandWindowInitError"
+    value="An error has occurred in attempting to initialize the commands window." />
+
+  <message
+    key="CommandWindowInitErrorTitle"
+    value="Command Window Error" />
+
+  <message
+    key="HelpWindowInitError"
+    value="An error has occurred in attempting to initialize the help window." />
+
+  <message
+    key="HelpWindowInitErrorTitle"
+    value="Help Window Error" />
+
+  <message
+    key="SyntaxError"
+    value="An error has occurred in attempting to run the scripts, please check for syntax errors.\n\nError Info:\n" />
+
+  <message
+    key="SyntaxErrorTitle"
+    value="Parse Scripts Error" />
+
+  <message
+    key="ResultsOpenError"
+    value="An error has occurred in attempting to open the results folder." />
+
+  <message
+    key="ResultsOpenErrorTitle"
+    value="Explore Results Error" />
+
+  <message
+    key="ResultsSaveError"
+    value="An error has occurred in attempting to save the results, please ensure a valid filename and path have been targetted." />
+
+  <message
+    key="ResultsSaveErrorTitle"
+    value="Save Results Error" />
+
+  <message
+    key="ScriptsSaveError"
+    value="An error has occurred in attempting to run save the scripts, please check file permissions and ensure files are not locked by other programs." />
+
+  <message
+    key="ScriptsSaveErrorTitle"
+    value="Script Save Error" />
+
+  <message
+    key="ScriptsLoadError"
+    value="An error has occurred in attempting to load scripts, please ensure project files have not been tempered with." />
+
+  <message
+    key="ScriptsLoadErrorTitle"
+    value="Script Load Error" />
+
+  <message
+    key="DatabaseConnectionError"
+    value="Unable to connect to the database specified. Please check your settings and ensure database access is allowed from your location." />
+
+  <message
+    key="DatabaseConnectionErrorTitle"
+    value="Database Connection Error" />
+
+  <message
+    key="PracticeModeInitError"
+    value="An error has occurred in attempting to initialize practice mode." />
+
+  <message
+    key="PracticeModeInitErrorTitle"
+    value="Practice Mode Error" />
+
+  <message
+    key="TableTokenDataSaveError"
+    value="An error has occurred in attempting to save table data to specified files.\n\nError Info:\n" />
+
+  <message
+    key="TableTokenDataSaveErrorTitle"
+    value="Explore Results Error" />
+
+</messages>
