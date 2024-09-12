@@ -1,4 +1,4 @@
-DB TeXML is a programming language and IDE designed to rapidly generate backend libraries or scripts based on information schema structures of the targeted database. Sql Server, MySql, Postgres and Ingres are supported.
+DB TeXML is a programming language and IDE designed to rapidly generate backend libraries or scripts based on information schema structures of the targeted database. Sql Server, MySql, Postgres and Oracle are supported.
 
 I wrote this code originally around 2010-2015, it started as a project in Python for rapidly building scripts to run against databases based on their information schemas to produce a set of files based on templates. 
 
